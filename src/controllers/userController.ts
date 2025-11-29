@@ -1,4 +1,4 @@
-// controllers/userController.js
+import { Request, Response } from 'express';
 import Usuarios from '../models/usuarios.js';
 import Curriculo from '../models/curriculo.js';
 
@@ -16,26 +16,27 @@ const LABELS_STATUS_CURSO = {
 };
 
 const LABELS_STATUS_PROFISSIONAL = {
-  'disponivel': 'Disponível para mercado', // Você pode deixar o texto como quiser!
+  'disponivel': 'Disponível para mercado',
   'nao-disponivel': 'Não disponível',
   'aberto-a-propostas': 'Aberto a propostas',
   'em-transicao': 'Em transição de carreira'
 };
 
 // --- MOSTRAR O PERFIL (Dashboard) ---
-export const showPerfil = async (req, res) => {
+export const showPerfil = async (req: Request, res: Response) => {
   try {
+    // O TS sabe que 'userId' existe por causa do arquivo types/express-session.d.ts
     const userId = req.session.userId;
 
-    // 1. Busca o Usuário (Nome, Email, etc)
+    // 1. Busca o Usuário
     const user = await Usuarios.findByPk(userId);
 
-    // 2. Busca o Currículo (Se existir)
+    // 2. Busca o Currículo
     const curriculo = await Curriculo.findOne({ where: { usuarioId: userId } });
 
-    // 3. Lógica do Toast (Flash Message)
+    // 3. Lógica do Toast
     const showToast = req.session.showWelcomeToast;
-    delete req.session.showWelcomeToast; // Limpa para não aparecer de novo
+    delete req.session.showWelcomeToast; 
 
     // 4. Renderiza a tela
     res.render('perfil', {

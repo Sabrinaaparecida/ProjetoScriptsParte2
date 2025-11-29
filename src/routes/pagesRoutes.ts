@@ -21,7 +21,7 @@ router.get('/logout', handleLogout);
 
 router.get('/home', checkAuth, (req, res) => {
   res.render('PaginaDeHome', {
-    userName: req.session.userName // Passa o nome para a View
+    userName: req.session.userName 
   });
 });
 

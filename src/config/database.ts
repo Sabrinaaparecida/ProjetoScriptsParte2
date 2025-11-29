@@ -5,8 +5,8 @@ const dbPath = path.resolve(process.cwd(), 'database', 'portal.db');
 
 const sequelize = new Sequelize({
   dialect: 'sqlite',
-  storage: dbPath, // Caminho para seu arquivo .db
-  logging: false // Desativa os logs SQL no console (opcional)
+  storage: dbPath,
+  logging: false
 });
 
 export default sequelize;
