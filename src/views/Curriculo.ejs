@@ -15,7 +15,7 @@
     <main class="container my-5">
         <h1 class="text-center mb-4">Preencha seu Currículo</h1>
 
-        <form id="curriculo-form" action="/curriculo/salvar" method="POST" novalidate>
+        <form id="curriculo-form" action="/curriculo/salvar" method="POST" class="needs-validation" novalidate>
 
             <section class="card shadow mb-4" aria-labelledby="info-pessoais-heading">
                 <div class="card-header" id="info-pessoais-heading">
@@ -193,11 +193,12 @@
     </main>
 
     <%- include('partials/footer') %>
-    
+
     <script src="https://unpkg.com/imask" defer></script>
     <script src="/JS/mascaras.js" defer></script>
     <script src="/JS/adicionarHabilidade.js" defer></script>
     <script src="/JS/validarCPF.js" defer></script>
+    <script src="/JS/validation.js" defer></script>
 
 </body>
 

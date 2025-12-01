@@ -35,8 +35,13 @@
             <p><strong>CPF:</strong> <%= curriculo.cpf %></p>
             <p><strong>Telefone:</strong> <%= curriculo.telefone %></p>
             <p><strong>Cidade:</strong> <%= curriculo.cidade %></p>
-            <% if (curriculo.linkedin) { %>
-                <p><strong>LinkedIn:</strong> <a href="<%= curriculo.linkedin %>" target="_blank">Acessar Perfil</a></p>
+           <% if (curriculo.linkedin) { %>
+                <p>
+                    <strong>LinkedIn:</strong> 
+                    <a href="<%= curriculo.linkedin %>" target="_blank">
+                        <%= curriculo.linkedin %>
+                    </a>
+                </p>
             <% } %>
           </div>
         </div>
@@ -55,11 +60,17 @@
         <div class="card shadow">
           <div class="card-body">
             <h5 class="card-title" id="formacao-heading">Formação Acadêmica</h5>
-            <p>
-                <strong><%= curriculo.curso %></strong> <br>
-                <%= curriculo.faculdade %> <br>
-                <span class="text-muted small">Status: <%= labelsStatus[curriculo.statusCurso] || curriculo.statusCurso %></span>
-            </p>
+            <% if (curriculo.curso) { %>
+                <p>
+                    <strong><%= curriculo.curso %></strong> <br>
+                    <%= curriculo.faculdade %> <br>
+                    <span class="text-muted small">
+                        Status: <%= labelsStatus[curriculo.statusCurso] || curriculo.statusCurso %>
+                    </span>
+                </p>
+            <% } else { %>
+                <p class="text-muted mb-0">Nenhuma formação acadêmica cadastrada.</p>
+            <% } %>
           </div>
         </div>
       </section>
@@ -68,11 +79,17 @@
         <div class="card shadow">
           <div class="card-body">
             <h5 class="card-title" id="experiencia-heading">Experiência Profissional</h5>
-            <p>
-                <strong><%= curriculo.cargo %></strong> <br>
-                <%= curriculo.empresa %> <br>
-                <span class="text-muted small">Tempo: <%= labelsTempo[curriculo.tempoExperiencia] || curriculo.tempoExperiencia %></span>
-            </p>
+            <% if (curriculo.cargo) { %>
+                <p>
+                    <strong><%= curriculo.cargo %></strong> <br>
+                    <%= curriculo.empresa %> <br>
+                    <span class="text-muted small">
+                        Tempo: <%= labelsTempo[curriculo.tempoExperiencia] || curriculo.tempoExperiencia %>
+                    </span>
+                </p>
+            <% } else { %>
+                <p class="text-muted mb-0">Nenhuma experiência profissional cadastrada.</p>
+            <% } %>
           </div>
         </div>
       </section>
@@ -135,7 +152,6 @@
       const shouldShow = <%= locals.showWelcomeToast === true %>;
       
       if (shouldShow) {
-        // Tenta pegar o nome do currículo primeiro, se não tiver, pega do usuário
         const nomeParaMostrar = "<%= locals.curriculo?.nome || locals.user?.nome || 'Usuário' %>";
         
         showToast(

@@ -87,6 +87,21 @@
   </main>
   
   <%- include('partials/footer') %>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // O EJS vai escrever true ou false aqui
+      const contaCriada = <%= locals.cadastroSucesso === 'true' %>;
+      
+      if (contaCriada) {
+        showToast(
+          "Sucesso!", 
+          "Conta criada com sucesso. Faça seu login.", 
+          "success"
+        );
+      }
+    });
+  </script>
 </body>
 
 </html>

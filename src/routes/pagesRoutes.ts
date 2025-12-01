@@ -8,7 +8,11 @@ import { showPerfil } from '../controllers/userController.js';
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.render('Login');
+  const sucesso = req.cookies.cadastroSucesso;
+  
+  if (sucesso) res.clearCookie('cadastroSucesso');
+
+  res.render('Login', { cadastroSucesso: sucesso });
 });
 
 router.get('/cadastro', (req, res) => {
@@ -21,18 +25,9 @@ router.get('/logout', handleLogout);
 
 router.get('/home', checkAuth, (req, res) => {
   res.render('PaginaDeHome', {
-    userName: req.session.userName 
+    userName: res.locals.userName 
   });
 });
-
-// router.get('/perfil', checkAuth, (req, res) => {
-//   const showToast = req.session.showWelcomeToast;
-//   delete req.session.showWelcomeToast;
-//   res.render('perfil', {
-//     userName: req.session.userName,
-//     showWelcomeToast: showToast 
-//   });
-// });
 
 router.get('/perfil', checkAuth, showPerfil);
 

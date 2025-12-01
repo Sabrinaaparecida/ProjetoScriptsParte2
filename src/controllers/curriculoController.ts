@@ -24,7 +24,7 @@ interface CurriculoBody {
 // --- GET: Mostra o formulário ---
 export const showCurriculo = async (req: Request, res: Response) => {
   try {
-    const userId = req.session.userId;
+    const userId = res.locals.userId;
 
     const curriculo = await Curriculo.findOne({ where: { usuarioId: userId } });
     const user = await Usuarios.findByPk(userId);
@@ -32,7 +32,7 @@ export const showCurriculo = async (req: Request, res: Response) => {
     res.render('Curriculo', {
       curriculo: curriculo,
       user: user,
-      userName: req.session.userName
+      userName: res.locals.userName
     });
 
   } catch (error) {
@@ -41,13 +41,10 @@ export const showCurriculo = async (req: Request, res: Response) => {
   }
 };
 
-// --- POST: Salva os dados ---
 export const saveCurriculo = async (req: Request, res: Response) => {
   try {
-    const userId = req.session.userId;
+    const userId = res.locals.userId;
     
-    // 4. Usamos a interface aqui ('as CurriculoBody')
-    // Agora o TS sabe que 'req.body' tem essas propriedades
     const body = req.body as CurriculoBody; 
 
     const dadosFormulario = {

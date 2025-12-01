@@ -1,0 +1,19 @@
+
+services:
+  app-portal:
+    container_name: portal-oportunidades
+    
+    # Constrói usando o Dockerfile Multi-stage
+    build: .
+    
+    ports:
+      - "3000:3000"
+    
+    volumes:
+      # A ÚNICA coisa que precisa persistir é o Banco de Dados
+      - ./database:/app/database
+      
+    env_file:
+      - .env
+    
+    restart: always
