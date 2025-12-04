@@ -1,10 +1,6 @@
 import { jest, describe, it, expect, beforeEach, beforeAll } from '@jest/globals';
 import { Request, Response } from 'express';
 
-// --- PASSO 1: Definir os Mocks (usando unstable_mockModule) ---
-// Isso garante que o mock exista ANTES do arquivo ser carregado
-
-// Mock do Model Usuarios
 jest.unstable_mockModule('../models/usuarios.js', () => ({
   __esModule: true,
   default: {
@@ -14,7 +10,6 @@ jest.unstable_mockModule('../models/usuarios.js', () => ({
   },
 }));
 
-// Mock do Bcrypt
 jest.unstable_mockModule('bcrypt', () => ({
   default: {
     compare: jest.fn(),
@@ -24,16 +19,12 @@ jest.unstable_mockModule('bcrypt', () => ({
   hash: jest.fn(),
 }));
 
-// Mock do JWT
 jest.unstable_mockModule('jsonwebtoken', () => ({
   default: {
     sign: jest.fn(),
   },
   sign: jest.fn(),
 }));
-
-// --- PASSO 2: Importar os arquivos dinamicamente ---
-// Usamos 'await import' para pegar os arquivos DEPOIS dos mocks estarem prontos
 
 const { handleLogin, handleRegister, handleLogout } = await import('../controllers/authController.js');
 const { default: Usuarios } = await import('../models/usuarios.js');
@@ -68,7 +59,6 @@ describe('Auth Controller', () => {
     it('deve retornar erro se usuário não for encontrado', async () => {
       req.body = { email: 'naoexiste@teste.com', senha: '123' };
       
-      // Agora o mock deve funcionar!
       (Usuarios.findOne as jest.Mock).mockResolvedValue(null);
 
       await handleLogin(req as Request, res as Response);

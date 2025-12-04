@@ -9,7 +9,9 @@
   <link rel="stylesheet" href="/CSS/perfil.css">
 </head>
 
-<body>
+<body data-show-welcome-toast="<%= locals.showWelcomeToast ? 'true' : 'false' %>"
+      data-user-name="<%= locals.user?.nome || '' %>">
+
   <%- include('partials/navbar') %>
 
   <main class="container my-5">
@@ -19,7 +21,7 @@
       <h2 class="text-center mb-4">Meu Perfil</h2>
 
       <section class="text-center mb-4" aria-label="Identificação do Usuário">
-        <img src="./Images/fotodeperfil.jpg" class="profile-pic mb-3" alt="Foto de perfil">
+        <img src="./Images/usuario.png" class="profile-pic mb-3" alt="Foto de perfil">
         
         <h4><%= curriculo.nome %></h4>
         <p class="text-muted fw-bold">
@@ -147,21 +149,7 @@
 
   <%- include('partials/footer') %>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const shouldShow = <%= locals.showWelcomeToast === true %>;
-      
-      if (shouldShow) {
-        const nomeParaMostrar = "<%= locals.curriculo?.nome || locals.user?.nome || 'Usuário' %>";
-        
-        showToast(
-          `Bem-vindo(a), ${nomeParaMostrar.split(' ')[0]}!`, 
-          "Login realizado com sucesso.", 
-          "success"
-        );
-      }
-    });
-  </script>
+  <script src="/JS/feedback.js" defer></script>
 </body>
 
 </html>

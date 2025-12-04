@@ -1,9 +1,7 @@
 import { jest, describe, it, expect, beforeEach } from '@jest/globals';
 import { Request, Response } from 'express';
 
-// --- 1. MOCKS (Definidos ANTES dos imports) ---
 
-// Mock do Model Usuarios
 jest.unstable_mockModule('../models/usuarios.js', () => ({
   __esModule: true,
   default: {
@@ -11,7 +9,6 @@ jest.unstable_mockModule('../models/usuarios.js', () => ({
   },
 }));
 
-// Mock do Model Curriculo
 jest.unstable_mockModule('../models/curriculo.js', () => ({
   __esModule: true,
   default: {
@@ -19,7 +16,6 @@ jest.unstable_mockModule('../models/curriculo.js', () => ({
   },
 }));
 
-// --- 2. IMPORTS DINÂMICOS ---
 const { showPerfil } = await import('../controllers/userController.js');
 const { default: Usuarios } = await import('../models/usuarios.js');
 const { default: Curriculo } = await import('../models/curriculo.js');
@@ -30,39 +26,34 @@ describe('User Controller', () => {
 
   beforeEach(() => {
     req = {
-      cookies: {}, // Inicializa cookies vazio
+      cookies: {},
     };
     res = {
       render: jest.fn(),
       redirect: jest.fn(),
       clearCookie: jest.fn(),
-      locals: { userId: 1 }, // IMPORTANTE: Simula o ID que vem do middleware
+      locals: { userId: 1 },
     };
     jest.clearAllMocks();
   });
 
   describe('showPerfil', () => {
     it('deve renderizar o perfil com dados do usuário e currículo', async () => {
-      // Setup dos dados falsos
       const mockUser = { id: 1, nome: 'Teste' };
       const mockCurriculo = { resumo: 'Desenvolvedor Fullstack' };
 
-      // Configura os mocks do banco
       (Usuarios.findByPk as jest.Mock).mockResolvedValue(mockUser);
       (Curriculo.findOne as jest.Mock).mockResolvedValue(mockCurriculo);
 
       await showPerfil(req as Request, res as Response);
-
-      // Verificações
-      expect(Usuarios.findByPk).toHaveBeenCalledWith(1); // Veio do res.locals.userId
+    
+      expect(Usuarios.findByPk).toHaveBeenCalledWith(1); 
       expect(Curriculo.findOne).toHaveBeenCalledWith({ where: { usuarioId: 1 } });
 
-      // Verifica se renderizou a página certa com os objetos certos
       expect(res.render).toHaveBeenCalledWith('Perfil', expect.objectContaining({
         user: mockUser,
         curriculo: mockCurriculo,
-        showWelcomeToast: false, // Default é false
-        // Verificamos se as labels estão presentes (não precisa checar o conteúdo exato de todas)
+        showWelcomeToast: false,
         labelsTempo: expect.any(Object),
         labelsStatus: expect.any(Object),
         labelsStatusProfissional: expect.any(Object)
@@ -70,7 +61,7 @@ describe('User Controller', () => {
     });
 
     it('deve limpar o cookie showToast se ele estiver true', async () => {
-      req.cookies = { showToast: 'true' }; // Simula o cookie presente
+      req.cookies = { showToast: 'true' }; 
       (Usuarios.findByPk as jest.Mock).mockResolvedValue({});
       (Curriculo.findOne as jest.Mock).mockResolvedValue({});
 
@@ -83,7 +74,7 @@ describe('User Controller', () => {
     });
 
     it('NÃO deve limpar cookie se showToast não existir', async () => {
-      req.cookies = {}; // Sem cookie
+      req.cookies = {}; 
       (Usuarios.findByPk as jest.Mock).mockResolvedValue({});
       (Curriculo.findOne as jest.Mock).mockResolvedValue({});
 
@@ -93,7 +84,6 @@ describe('User Controller', () => {
     });
 
     it('deve redirecionar para / em caso de erro no banco', async () => {
-      // Força erro no banco
       (Usuarios.findByPk as jest.Mock).mockRejectedValue(new Error('Erro DB'));
 
       await showPerfil(req as Request, res as Response);

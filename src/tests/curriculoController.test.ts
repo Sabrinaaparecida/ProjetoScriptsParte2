@@ -1,8 +1,6 @@
 import { jest, describe, it, expect, beforeEach, beforeAll, afterAll } from '@jest/globals';
 import { Request, Response } from 'express';
 
-// --- 1. MOCKS ---
-// Mock do Model Curriculo
 jest.unstable_mockModule('../models/curriculo.js', () => ({
   __esModule: true,
   default: {
@@ -11,7 +9,6 @@ jest.unstable_mockModule('../models/curriculo.js', () => ({
   },
 }));
 
-// Mock do Model Usuarios
 jest.unstable_mockModule('../models/usuarios.js', () => ({
   __esModule: true,
   default: {
@@ -19,7 +16,6 @@ jest.unstable_mockModule('../models/usuarios.js', () => ({
   },
 }));
 
-// --- 2. IMPORTS DINÂMICOS ---
 const { showCurriculo, saveCurriculo } = await import('../controllers/curriculoController.js');
 const { default: Curriculo } = await import('../models/curriculo.js');
 const { default: Usuarios } = await import('../models/usuarios.js');
@@ -28,7 +24,6 @@ describe('Curriculo Controller', () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
 
-  // Silencia console.error e console.log para não sujar o terminal
   beforeAll(() => {
     jest.spyOn(console, 'error').mockImplementation(() => {});
     jest.spyOn(console, 'log').mockImplementation(() => {});
@@ -45,12 +40,11 @@ describe('Curriculo Controller', () => {
     res = {
       render: jest.fn(),
       redirect: jest.fn(),
-      locals: { userId: 1, userName: 'Teste' }, // Simula dados do middleware
+      locals: { userId: 1, userName: 'Teste' },
     };
     jest.clearAllMocks();
   });
 
-  // --- TESTES: showCurriculo (GET) ---
   describe('showCurriculo', () => {
     it('deve renderizar o formulário com dados do currículo e usuário', async () => {
       const mockCurriculo = { id: 10, cargo: 'Dev' };
@@ -78,31 +72,28 @@ describe('Curriculo Controller', () => {
     });
   });
 
-  // --- TESTES: saveCurriculo (POST) ---
   describe('saveCurriculo', () => {
-    // Dados simulados do formulário (com hifens, como vem do HTML)
+
     const bodyFormulario = {
       nome: 'Fulano',
-      'status-curso': 'concluido', // Importante testar o hífen
-      'tempo-empresa': '2 anos',   // Importante testar o hífen
+      'status-curso': 'concluido', 
+      'tempo-empresa': '2 anos',   
       cargo: 'Dev Senior'
     };
 
     it('deve CRIAR um novo currículo se não existir', async () => {
       req.body = bodyFormulario;
-      
-      // Simula que NÃO encontrou currículo anterior (retorna null)
+
       (Curriculo.findOne as jest.Mock).mockResolvedValue(null);
       (Curriculo.create as jest.Mock).mockResolvedValue({});
 
       await saveCurriculo(req as Request, res as Response);
 
-      // Verifica se mapeou os campos com hífen corretamente
       expect(Curriculo.create).toHaveBeenCalledWith(expect.objectContaining({
         usuarioId: 1,
         nome: 'Fulano',
-        statusCurso: 'concluido',     // Verificando mapeamento
-        tempoExperiencia: '2 anos',   // Verificando mapeamento
+        statusCurso: 'concluido',     
+        tempoExperiencia: '2 anos',   
         cargo: 'Dev Senior'
       }));
       expect(res.redirect).toHaveBeenCalledWith('/perfil');
@@ -111,18 +102,16 @@ describe('Curriculo Controller', () => {
     it('deve ATUALIZAR um currículo existente', async () => {
       req.body = bodyFormulario;
 
-      // Mock do objeto retornado pelo Sequelize (precisa ter a função .update)
       const mockCurriculoExistente = {
         id: 50,
         update: jest.fn().mockResolvedValue({})
       };
 
-      // Simula que ENCONTROU currículo
       (Curriculo.findOne as jest.Mock).mockResolvedValue(mockCurriculoExistente);
 
       await saveCurriculo(req as Request, res as Response);
 
-      expect(Curriculo.create).not.toHaveBeenCalled(); // Não deve criar
+      expect(Curriculo.create).not.toHaveBeenCalled();
       expect(mockCurriculoExistente.update).toHaveBeenCalledWith(expect.objectContaining({
         statusCurso: 'concluido',
         tempoExperiencia: '2 anos'

@@ -21,7 +21,6 @@ interface CurriculoBody {
   habilidades?: string;
 }
 
-// --- GET: Mostra o formulário ---
 export const showCurriculo = async (req: Request, res: Response) => {
   try {
     const userId = res.locals.userId;
@@ -59,7 +58,7 @@ export const saveCurriculo = async (req: Request, res: Response) => {
       resumo: body.resumo,
       curso: body.curso,
       faculdade: body.faculdade,
-      statusCurso: body['status-curso'], // Acessa com colchetes por causa do hífen
+      statusCurso: body['status-curso'],
       cargo: body.cargo,
       empresa: body.empresa,
       tempoExperiencia: body['tempo-empresa'],

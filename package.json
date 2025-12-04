@@ -8,7 +8,7 @@
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "clean": "rimraf dist",
     "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
-    "build": "npm run clean && tsc && npm run copy-assets",
+    "build": "npm run clean && npx tsc && npm run copy-assets",
     "copy-assets": "copyfiles -u 1 \"src/**/*.{json,ejs,css,jpg,png,js}\" dist",
     "start": "node dist/server.js",
     "dev": "npm run build && tsc-watch --onSuccess \"node dist/server.js\""

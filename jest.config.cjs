@@ -4,7 +4,6 @@ module.exports = {
   testEnvironment: 'node',
   testMatch: ['**/tests/**/*.test.ts', '**/*.spec.ts'],
   
-  // MANTENHA O MAPPER ATIVO
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },

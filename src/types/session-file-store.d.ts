@@ -12,11 +12,9 @@ declare module 'session-file-store' {
     logFn?: Function;
   }
 
-  // Define a Classe que a biblioteca cria
  interface FileStoreConstructor {
     new (options?: FileStoreOptions): Store;
   }
 
-  // Define a função principal exportada: (session) => Classe
   export default function init(session: any): FileStoreConstructor;
 }

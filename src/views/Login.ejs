@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="/CSS/menu.css">
 </head>
 
-<body>
+<body data-cadastro-sucesso="<%= locals.cadastroSucesso ? 'true' : 'false' %>">
   <nav class="navbar navbar-expand-lg navbar-dark bg-custom-blue">
     <div class="container-fluid">
       <a class="navbar-brand fw-bold" href="/home">Portal de Oportunidades</a>
@@ -88,20 +88,7 @@
   
   <%- include('partials/footer') %>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // O EJS vai escrever true ou false aqui
-      const contaCriada = <%= locals.cadastroSucesso === 'true' %>;
-      
-      if (contaCriada) {
-        showToast(
-          "Sucesso!", 
-          "Conta criada com sucesso. Faça seu login.", 
-          "success"
-        );
-      }
-    });
-  </script>
+  <script src="/JS/feedback.js" defer></script>
 </body>
 
 </html>
