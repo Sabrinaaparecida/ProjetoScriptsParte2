@@ -1,4 +1,4 @@
-Este projeto foi desenvolvido com foco em arquitetura MVC, segurança e boas práticas de desenvolvimento com TypeScript.
+Este projeto acadêmico foi desenvolvido com foco em arquitetura MVC, segurança e boas práticas de desenvolvimento com TypeScript.
 
 ## 🛠️ Tecnologias Utilizadas
 
